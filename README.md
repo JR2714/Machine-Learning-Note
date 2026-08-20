@@ -1,24 +1,28 @@
-# ml-theory 学习记录
+# ml-theory
 
-> 机器学习理论学习项目（西瓜书/花书）——西瓜书与花书读书笔记。
-> 学习进度见仓库内笔记。
+周志华《机器学习》（西瓜书）读书笔记与课后习题。Goodfellow《深度学习》（花书）作工具书查阅。
 
-## 环境
+## 仓库里有什么
 
-- WSL2 Ubuntu，笔记用 Markdown（无代码依赖）
-- 主题：周志华《机器学习》（西瓜书）/ Goodfellow《深度学习》（花书）
+```
+notes/          章节笔记与习题解答
+data/           习题用到的数据集
+exercises/      可运行脚本与训练曲线
+```
 
-## 学习计划（按需选章，不自拟路线）
+教材 PDF 因版权不入库。
 
-1. 西瓜书第 1-2 章：基础概念（模型评估、偏差-方差、过拟合/欠拟合）
-2. 西瓜书第 5 章：神经网络
-3. 西瓜书第 12 章：计算学习理论（有余力再学）
-4. 花书第 6-9 章：作为工具书查阅（阅读门槛更高）
+## 笔记
 
-## 进度
+| 文件 | 内容 |
+|------|------|
+| [`notes/chap1.md`](notes/chap1.md) | 第 1 章 绪论 |
+| [`notes/chap2.md`](notes/chap2.md) | 第 2 章 模型评估与选择 |
+| [`notes/chap5.md`](notes/chap5.md) | 第 5 章 神经网络（手稿） |
+| [`notes/chap5-sorted.md`](notes/chap5-sorted.md) | 第 5 章（按教材体例整理） |
+| [`notes/chap5-ex.md`](notes/chap5-ex.md) | 第 5 章习题 |
 
-| 内容 | 状态 | 笔记 |
-|------|------|------|
-| 西瓜书第 1 章 | ✅ 已修缮（2026-08-08，含两处官方勘误修正） | `notes/chap1.md` |
-| 西瓜书第 2 章 | ✅ 已修缮（2026-08-10，17 处官方勘误修正） | `notes/chap2.md` |
-| 西瓜书第 5 章 | ❌ 未开始 | （待写，放 `notes/`） |
+## UCI 数据集
+
+UCI 原始文件放在 `data/wine/`、`data/breast+cancer+wisconsin+diagnostic/`（无表头的 `.data`）。数据来自 [UCI Machine Learning Repository](https://archive.ics.uci.edu/)。
+
