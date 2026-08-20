@@ -103,7 +103,14 @@ class SingleHiddenBP:
     """
 
     def __init__(self, d: int, q: int, l: int, rng: np.random.Generator) -> None:
-        # 图 5.8 第 1 行：权、阈值在 (0, 1) 内随机初始化
+        """图 5.8 第 1 行：权、阈值在 (0, 1) 内随机初始化
+
+        Args:
+            d (int): 输入维度。
+            q (int): 隐层神经元个数。
+            l (int): 输出维度。
+            rng (np.random.Generator): 随机数生成器。
+        """
         self.V = rng.uniform(0.0, 1.0, size=(d, q))
         self.gamma = rng.uniform(0.0, 1.0, size=(q,))
         self.W = rng.uniform(0.0, 1.0, size=(q, l))

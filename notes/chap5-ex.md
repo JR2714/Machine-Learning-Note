@@ -62,3 +62,13 @@ $$
 [代码](../exercises/ex5_5_bp.py); [无序结果](../exercises/ex5_5_curve.png), [有序结果](../exercises/ex5_5_encoding.png).
 
 通过训练和修改 p (隐藏层神经元数) 以及 sed (不同参数初始值), 训练结果都指向标准 BP 收敛的速度更快. 有序化降了 d，本题里没让优化更好；标准仍快于累积.
+
+## 5.6 试设计一个 BP 改进算法，能通过动态调整学习率显著提升收敛速度.编程实现该算法，并选择两个 UCI 数据集与标准 BP 算法进行实验比较.
+
+本题选择了 Wine（178×13，3 类）和 Breast Cancer Wisconsin Diagnostic（WDBC，569×30，2 类）作为实验数据集。特征做 z-score（Wine 各列尺度差很大，不标准化则比的是尺度而不是 $\eta$）；Wine 标签 one-hot，$l=3$，WDBC 二分类 $l=1$。网络复用 5.5 的 `SingleHiddenBP`，$q=5$，两种算法同一 `snapshot` 初值，只改 $\eta$ 策略。固定对照 $\eta=0.01$，动态版起步 $0.1$；100 epoch，全程看训练 $E$（式 5.16）。本题比的是收敛速度，暂不划分训练/测试。
+
+算法是 Bold Driver（阅读材料里的先大后小）：$E$ 下降则 $\eta\leftarrow\eta\times 1.1$（或消融里的 $\times 2$），$E$ 上升则参数回退到本 epoch 之前，损失记录一并改回（`history[-1]=history[-2]`），$\eta\leftarrow\eta\times 0.5$。
+
+最初没有回退，且增长过猛（$\times 2$）：前几步明显快于固定 $\eta$，随后剧烈抖动，并常常停在比标准 BP 更高的 $E$。加上回退后，$\times 2$ 不再停在高台，但仍有齿状；正式采用 $\times 1.1/\times 0.5$ + 回退，两数据集上都显著快于固定 $\eta$，且曲线稳定。
+
+[代码](../exercises/ex5_6.py)（网络见 [5.5](../exercises/ex5_5_bp.py) 的 `SingleHiddenBP`）；[×2 无回退](../exercises/ex5_6_curve_100ep_x2x0.5.png)；[×2 有回退](../exercises/ex5_6_curve_100ep_x2x0.5_with_revert.png)；[×1.1 有回退（主结论）](../exercises/ex5_6_curve_100ep_x1.1x0.5_with_revert.png)。
