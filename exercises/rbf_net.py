@@ -28,7 +28,7 @@ class rbf_net:
         """
         self.center = np.array([[1.0, 0.0], [0.0, 1.0]]) # 中心设为一类对角线两座山峰
         self.beta = 1.0 # 高斯径向基的参数
-        self.W = np.empty([3, 1]) # 多出来一个维度用来放输出层阈值 theta
+        self.W = np.zeros([3, 1]) # 多出来一个维度用来放输出层阈值 theta
 
     def solve_xor_weight(self) -> None:
         """两步法第二步：中心定死后，解线性方程组定输出权。
@@ -66,10 +66,11 @@ class rbf_net:
     def test(self) -> None:
         """测试网络"""
         print(f"输出权: {self.W}")
-        print(f"(0,0) 结果: {self.forward(np.array([0, 0]))}")
-        print(f"(0,1) 结果: {self.forward(np.array([0, 1]))}")
-        print(f"(1,0) 结果: {self.forward(np.array([1, 0]))}")
-        print(f"(1,1) 结果: {self.forward(np.array([1, 1]))}")
+        print(f"(0,0) 结果: {self.forward(np.array([0, 0]))[0]:.1f}")
+        print(f"(0,1) 结果: {self.forward(np.array([0, 1]))[0]:.1f}")
+        print(f"(1,0) 结果: {self.forward(np.array([1, 0]))[0]:.1f}")
+        print(f"(1,1) 结果: {self.forward(np.array([1, 1]))[0]:.1f}")
+
 def main() -> None:
     nn = rbf_net()
     nn.solve_xor_weight()
