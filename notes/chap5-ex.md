@@ -91,3 +91,9 @@ $\beta=1$ 时 $w\approx 2.50$, $\theta\approx -1.84$, 四个顶点精确 $0/1$.
 本题是表示不是学习: 中心和 $\beta$ 是按标签几何定的, $W$ 是四个点上的线性最小二乘, 没有未见样本.
 
 [代码示例](../exercises/rbf_net.py)
+
+## 5.8 从网上下载或自己编程实现 SOM 网络，并观察其在西瓜数据集 3.0α 上产生的结果.
+
+3.0 $\alpha$ 仅有密度和含糖率. 使用MiniSom导入 SOM 网络, 尝试 $3\times 3$ 和 $4\times 4$, $\eta=0.5$, $\sigma=\max(H,W)/2$, 200 epoch.
+
+[代码](../exercises/ex_5_8_som.py)；[图](../exercises/ex5_8_som.png).
