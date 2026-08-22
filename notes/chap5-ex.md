@@ -97,3 +97,71 @@ $\beta=1$ 时 $w\approx 2.50$, $\theta\approx -1.84$, 四个顶点精确 $0/1$.
 3.0 $\alpha$ 仅有密度和含糖率. 使用MiniSom导入 SOM 网络, 尝试 $3\times 3$ 和 $4\times 4$, $\eta=0.5$, $\sigma=\max(H,W)/2$, 200 epoch.
 
 [代码](../exercises/ex_5_8_som.py)；[图](../exercises/ex5_8_som.png).
+
+## 5.9  试推导用于 Elman 网络的 BP 算法.
+
+![Elman 神经网络](elman_draw_by_qwen.png)
+
+为了能清楚表示参数, 我们采用了块状代替点状表示神经网络各层, 并将书本图像中的 "上一时刻的隐层" 剥离出来, 以清楚表示参数的作用.
+
+前向链路:
+$$
+\begin{aligned}
+a(t)&=W_1 x(t)+W_2 h(t-1)+b_1 \\
+h(t)&=f(a(t)) \\
+o(t)&=W_3h(t)+b_2\\
+\hat{y}(t)&=g(o(t))\\
+E&=\sum_{t=1}^T\frac{1}{2}\lVert \hat{y}(t) - y(t) \rVert^2
+\end{aligned}
+$$
+逐个求梯度:
+$$
+\begin{aligned}
+\frac{\partial E}{\partial b_2}&=\sum_{t}\frac{\partial E}{\partial \hat{y}(t)}\cdot\frac{\partial \hat{y}(t)}{\partial o(t)}\cdot\frac{\partial o(t)}{\partial b_2}\\
+\,\\
+&=\sum_t(\hat{y}(t)-y(t))\odot g'(o(t))\\
+\,\\
+\frac{\partial E}{\partial W_3}&=\sum_{t}\frac{\partial E}{\partial \hat{y}(t)}\cdot\frac{\partial \hat{y}(t)}{\partial o(t)}\cdot\frac{\partial o(t)}{\partial W_3}\\
+\,\\
+&=\sum_t(\hat{y}(t)-y(t))\odot g'(o(t)) \cdot h^T(t)\\
+\end{aligned}
+$$
+这里我们把 $\hat{y}(t)-y(t))\odot g'(o(t))$ 记作 $\delta_o(t)$, 上两式简化为: 
+$$
+\begin{aligned}
+\frac{\partial E}{\partial b_2}&=\sum_{t}\frac{\partial E}{\partial \hat{y}(t)}\cdot\frac{\partial \hat{y}(t)}{\partial o(t)}\cdot\frac{\partial o(t)}{\partial b_2}\\
+\,\\
+&=\sum_t\delta_o(t)\\
+\frac{\partial E}{\partial W_3}&=\sum_{t}\frac{\partial E}{\partial \hat{y}(t)}\cdot\frac{\partial \hat{y}(t)}{\partial o(t)}\cdot\frac{\partial o(t)}{\partial W_3}\\
+\,\\
+&=\sum_t\delta_o(t)\cdot h^T(t)\\
+\end{aligned}
+$$
+
+为了解决 "循环" , 我们直接记:
+$$
+\delta_h(t)=\frac{\partial E}{\partial a(t)}
+$$
+$a(t)$ 对 $E$ 的影响有: 
+1. a(t) -> h(t) -> o(t) -> E;
+2. a(t) -> h(t) -> a(t+1) -> E.
+
+且 $\delta_h(T+1)=0$ , 因此:
+$$
+\delta_h(t)=\left[W_3^T\delta_o(t)+W_2^T\delta_h(t+1)\right]\odot f'(a(t))
+$$
+
+$$
+\begin{aligned}
+\frac{\partial E}{\partial b_1}&=\sum_t\frac{\partial E}{\partial a(t)}\cdot\frac{\partial a(t)}{\partial b_1}\\
+\\
+&=\sum_t\delta_h(t)\\
+\\
+\frac{\partial E}{\partial W_2}&=\sum_t\frac{\partial E}{\partial a(t)}\cdot\frac{\partial a(t)}{\partial W_2}\\
+\\
+&=\sum_t\delta_h(t)\cdot h^T(t-1)\\
+\\
+\frac{\partial E}{\partial W_1}&=\sum_t\frac{\partial E}{\partial a(t)}\cdot\frac{\partial a(t)}{\partial W_1}\\
+\\
+&=\sum_t\delta_h(t)\cdot x^T(t)
+\end{aligned}
